@@ -11,37 +11,42 @@
   </div>
 </template>
 <script>
-import firebase from 'firebase'
+import firebaseService from '../services/firebase'
 import markdownIt from 'markdown-it'
+
+const noteTemplate = {
+  title: '',
+  content: ''
+}
+
 export default {
   name: 'note',
   data () {
     return {
-      note: null,
+      note: {},
       md: markdownIt()
     }
   },
-  created () {
-    this.fetch()
-  },
   computed: {
-    ref () {
-      let user = firebase.auth().currentUser
+    current () {
       let key = this.$route.params.key
-      return `users/${user.uid}/notes/${key}`
+      return this.$store.state.notes[key]
+    }
+  },
+  created () {
+    this.note = Object.assign({}, noteTemplate, this.current)
+  },
+  watch: {
+    current: function () {
+      this.note = Object.assign({}, noteTemplate, this.current)
     }
   },
   methods: {
     render (source) {
       return this.md.render(source.toString())
     },
-    fetch () {
-      firebase.database().ref(this.ref).on('value', (snapshot) => {
-        this.note = snapshot.val()
-      })
-    },
     save () {
-      firebase.database().ref(this.ref).set(this.note)
+      firebaseService.update(this.note)
     },
     cancel () {
       this.$router.go(-1)

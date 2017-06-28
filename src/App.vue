@@ -13,12 +13,11 @@ import Navbar from './components/Navbar'
 export default {
   name: 'app',
   components: {
-    'navbar': Navbar
+    Navbar
   }
 }
 </script>
 <style>
   @import "../node_modules/bulma/css/bulma.css";
-
 </style>
 

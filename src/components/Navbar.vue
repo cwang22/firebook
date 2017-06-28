@@ -2,7 +2,7 @@
   <nav class="nav">
     <div class="nav-left">
       <a class="nav-item">VueNotes</a>
-      <router-link :to="item.id" class="nav-item" v-for="item in list" :key="item.id" v-if=" item.auth || authenticated()">{{item.title}}</router-link>
+      <router-link :to="item.id" class="nav-item" v-for="item in list" :key="item.id" v-if=" item.auth || authenticated">{{item.title}}</router-link>
     </div>
 
   <!-- This "nav-toggle" hamburger menu is only visible on mobile -->
@@ -16,14 +16,16 @@
   <!-- This "nav-menu" is hidden on mobile -->
   <!-- Add the modifier "is-active" to display it on mobile -->
   <div class="nav-right nav-menu">
-    <a class="nav-item" v-if="authenticated()">{{ user.displayName }}</a>
-    <a class="nav-item" v-if="authenticated()" @click="logout">Logout</a>
-    <a class="nav-item" v-else="authenticated()" @click="login">Login</a>
+    <a class="nav-item" v-if="authenticated">{{ username }}</a>
+    <a class="nav-item" v-if="authenticated" @click="logout">Logout</a>
+    <a class="nav-item" v-else="authenticated" @click="login">Login</a>
   </div>
 </nav>
 </template>
 <script>
   import firebase from 'firebase'
+  import '../services/firebase'
+
   export default {
     data () {
       return {
@@ -38,37 +40,24 @@
             id: '/notes',
             auth: false
           }
-        ],
-        user: window.user
+        ]
       }
     },
-
-    methods: {
+    computed: {
       authenticated () {
-        return window.authenticated !== null && window.authenticated
+        return this.$store.state.user.authenticated
       },
+      username () {
+        return this.$store.state.user.name
+      }
+    },
+    methods: {
       login () {
         const provider = new firebase.auth.GoogleAuthProvider()
-        firebase.auth().signInWithPopup(provider).then((result) => {
-          this.user = result.user
-          let usersRef = firebase.database().ref(`users/${this.user.uid}`)
-          usersRef.once('value', (snapshot) => {
-            if (snapshot.hasChild('notes')) return
-            usersRef.child('notes').push({
-              title: 'Hello World!',
-              content: 'Your first note'
-            })
-          })
-          this.$forceUpdate()
-        })
+        firebase.auth().signInWithPopup(provider)
       },
       logout () {
-        firebase.auth().signOut().then(() => {
-          window.authenticated = false
-          window.user = null
-          this.user = null
-          this.$forceUpdate()
-        })
+        firebase.auth().signOut()
       }
     }
   }

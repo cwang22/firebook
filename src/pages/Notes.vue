@@ -8,7 +8,7 @@
           <header class="card-header">
             <p class="card-header-title">{{ note.title }}</p>
           </header>
-          <div class="card-content" v-html="render(note.content)"></div>
+          <div class="card-content content" v-html="render(note.content)"></div>
           <div class="card-footer">
             <a class="card-footer-item" @click="edit(key)">Edit</a>
           </div>
@@ -18,21 +18,19 @@
   </div>
 </template>
 <script>
-import firebase from 'firebase'
 import markdownIt from 'markdown-it'
+
 export default {
   name: 'notes',
   data () {
     return {
-      notes: [],
       md: markdownIt()
     }
   },
-  mounted () {
-    let user = firebase.auth().currentUser
-    firebase.database().ref(`users/${user.uid}/notes`).on('value', (snapshot) => {
-      this.notes = snapshot.val()
-    })
+  computed: {
+    notes () {
+      return this.$store.state.notes
+    }
   },
   methods: {
     render (source) {
