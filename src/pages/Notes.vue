@@ -11,6 +11,7 @@
           <div class="card-content content" v-html="render(note.content)"></div>
           <div class="card-footer">
             <a class="card-footer-item" @click="edit(key)">Edit</a>
+            <a class="card-footer-item is-danger" @click="destroy(key)">Delete</a>
           </div>
         </div>
       </div>
@@ -18,6 +19,7 @@
   </div>
 </template>
 <script>
+import firebaseService from '../services/firebase'
 import markdownIt from 'markdown-it'
 
 export default {
@@ -33,14 +35,17 @@ export default {
     }
   },
   methods: {
-    render (source) {
-      return this.md.render(source.toString())
+    create () {
+      this.$router.push(`notes/create`)
     },
     edit (key) {
       this.$router.push(`notes/${key}`)
     },
-    create () {
-
+    destroy (key) {
+      firebaseService.destroy(key)
+    },
+    render (source) {
+      return this.md.render(source.toString())
     }
   }
 }
@@ -48,5 +53,11 @@ export default {
 <style scoped>
   .button {
     margin: 20px 0;
+  }
+  .is-danger {
+    color: #ff3860;
+  }
+  .is-danger:hover {
+    color: #363636;
   }
 </style>

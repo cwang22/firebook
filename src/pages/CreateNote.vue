@@ -14,7 +14,7 @@
         </p>
       </div>
       <div class="field">
-        <a class="button is-primary" @click="save">Save</a>
+        <a class="button is-primary" @click="create">Submit</a>
         <a class="button" @click="cancel">Cancel</a>
       </div>
     </div>
@@ -25,39 +25,23 @@
 import firebaseService from '../services/firebase'
 import markdownIt from 'markdown-it'
 
-const noteTemplate = {
-  title: '',
-  content: ''
-}
-
 export default {
   name: 'note',
   data () {
     return {
-      note: {},
+      note: {
+        title: '',
+        content: ''
+      },
       md: markdownIt()
-    }
-  },
-  computed: {
-    current () {
-      let key = this.$route.params.key
-      return this.$store.state.notes[key]
-    }
-  },
-  created () {
-    this.note = Object.assign({}, noteTemplate, this.current)
-  },
-  watch: {
-    current: function () {
-      this.note = Object.assign({}, noteTemplate, this.current)
     }
   },
   methods: {
     render (source) {
       return this.md.render(source.toString())
     },
-    save () {
-      firebaseService.update(this.note)
+    create () {
+      firebaseService.create(this.note)
     },
     cancel () {
       this.$router.go(-1)

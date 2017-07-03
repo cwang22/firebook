@@ -41,11 +41,17 @@ export default {
   logout () {
     firebase.auth().signOut()
   },
+  create (note) {
+    let user = firebase.auth().currentUser
+    firebase.database().ref(`users/${user.uid}/notes`).push(note)
+  },
   update (note) {
     let user = firebase.auth().currentUser
     let key = window.app.$route.params.key
-    console.log(user)
-    console.log(key)
     firebase.database().ref(`users/${user.uid}/notes/${key}`).set(note)
+  },
+  destroy (key) {
+    let user = firebase.auth().currentUser
+    firebase.database().ref(`users/${user.uid}/notes/${key}`).remove()
   }
 }
