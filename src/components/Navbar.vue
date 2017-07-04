@@ -7,7 +7,7 @@
 
   <!-- This "nav-toggle" hamburger menu is only visible on mobile -->
   <!-- You need JavaScript to toggle the "is-active" class on "nav-menu" -->
-  <span class="nav-toggle">
+  <span class="nav-toggle" @click="isActive = !isActive">
     <span></span>
     <span></span>
     <span></span>
@@ -15,7 +15,7 @@
 
   <!-- This "nav-menu" is hidden on mobile -->
   <!-- Add the modifier "is-active" to display it on mobile -->
-  <div class="nav-right nav-menu">
+  <div class="nav-right nav-menu" v-bind:class="{ 'is-active': isActive }">
     <a class="nav-item" v-if="authenticated">{{ username }}</a>
     <a class="nav-item" v-if="authenticated" @click="logout">Logout</a>
     <a class="nav-item" v-else="authenticated" @click="login">Login</a>
@@ -40,7 +40,8 @@
             id: '/notes',
             auth: false
           }
-        ]
+        ],
+        isActive: false
       }
     },
     computed: {

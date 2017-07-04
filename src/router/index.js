@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/pages/Home'
 import Notes from '@/pages/Notes'
-import Note from '@/pages/Note'
+import EditNote from '@/pages/EditNote'
 import CreateNote from '@/pages/CreateNote'
 Vue.use(Router)
 
@@ -25,8 +25,8 @@ export default new Router({
     },
     {
       path: '/notes/:key',
-      name: 'note',
-      component: Note
+      name: 'edit',
+      component: EditNote
     }
   ]
 })

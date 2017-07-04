@@ -18,38 +18,20 @@
         <a class="button" @click="cancel">Cancel</a>
       </div>
     </div>
-    <div class="is-gapless column content" v-html="render(note.content)"></div>
+    <div class="is-gapless column">
+      <h1 class="title" v-text="note.title"></h1>
+      <div class="content" v-html="render(note.content)"></div>
+    </div>
   </div>
 </template>
 <script>
 import firebaseService from '../services/firebase'
 import markdownIt from 'markdown-it'
-
-const noteTemplate = {
-  title: '',
-  content: ''
-}
-
 export default {
-  name: 'note',
+  props: ['note', 'isEdit'],
   data () {
     return {
-      note: {},
       md: markdownIt()
-    }
-  },
-  computed: {
-    current () {
-      let key = this.$route.params.key
-      return this.$store.state.notes[key]
-    }
-  },
-  created () {
-    this.note = Object.assign({}, noteTemplate, this.current)
-  },
-  watch: {
-    current: function () {
-      this.note = Object.assign({}, noteTemplate, this.current)
     }
   },
   methods: {
@@ -57,7 +39,8 @@ export default {
       return this.md.render(source.toString())
     },
     save () {
-      firebaseService.update(this.note)
+      if (this.isEdit) firebaseService.update(this.note)
+      else firebaseService.create(this.note)
     },
     cancel () {
       this.$router.go(-1)
