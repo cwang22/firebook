@@ -30,6 +30,7 @@ export default {
           uid: '',
           name: ''
         }
+        window.app.$router.push('/')
       }
       window.app.$store.dispatch('onAuthStateChanged', storeUser)
     })
@@ -42,16 +43,16 @@ export default {
     firebase.auth().signOut()
   },
   create (note) {
-    let user = firebase.auth().currentUser
+    const user = firebase.auth().currentUser
     firebase.database().ref(`notes/${user.uid}`).push(note)
   },
   update (note) {
-    let user = firebase.auth().currentUser
-    let key = window.app.$route.params.key
+    const user = firebase.auth().currentUser
+    const key = window.app.$route.params.key
     firebase.database().ref(`notes/${user.uid}/${key}`).set(note)
   },
   destroy (key) {
-    let user = firebase.auth().currentUser
+    const user = firebase.auth().currentUser
     firebase.database().ref(`notes/${user.uid}/${key}`).remove()
   }
 }

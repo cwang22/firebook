@@ -23,8 +23,7 @@
 </nav>
 </template>
 <script>
-  import firebase from 'firebase'
-  import '../services/firebase'
+  import firebaseService from '../services/firebase'
 
   export default {
     data () {
@@ -54,11 +53,10 @@
     },
     methods: {
       login () {
-        const provider = new firebase.auth.GoogleAuthProvider()
-        firebase.auth().signInWithPopup(provider)
+        firebaseService.login()
       },
       logout () {
-        firebase.auth().signOut()
+        firebaseService.logout()
       }
     }
   }
