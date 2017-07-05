@@ -21,7 +21,7 @@ export default {
           uid: user.uid,
           name: user.displayName
         }
-        firebase.database().ref(`users/${user.uid}/notes`).on('value', (snapshot) => {
+        firebase.database().ref(`notes/${user.uid}`).on('value', (snapshot) => {
           window.app.$store.dispatch('fetch', snapshot.val())
         })
       } else {
@@ -43,15 +43,15 @@ export default {
   },
   create (note) {
     let user = firebase.auth().currentUser
-    firebase.database().ref(`users/${user.uid}/notes`).push(note)
+    firebase.database().ref(`notes/${user.uid}`).push(note)
   },
   update (note) {
     let user = firebase.auth().currentUser
     let key = window.app.$route.params.key
-    firebase.database().ref(`users/${user.uid}/notes/${key}`).set(note)
+    firebase.database().ref(`notes/${user.uid}/${key}`).set(note)
   },
   destroy (key) {
     let user = firebase.auth().currentUser
-    firebase.database().ref(`users/${user.uid}/notes/${key}`).remove()
+    firebase.database().ref(`notes/${user.uid}/${key}`).remove()
   }
 }
