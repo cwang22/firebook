@@ -1,9 +1,12 @@
 <template>
   <div id="app">
     <navbar></navbar>
-    <div class="container" style="margin-top: 40px;">
+    <section class="section">
+      <div class="container">
         <router-view></router-view>
     </div>
+    </section>
+
   </div>
 </template>
 
@@ -19,5 +22,8 @@ export default {
 </script>
 <style>
   @import "../node_modules/bulma/css/bulma.css";
+  .section {
+    padding: 3rem 1.5rem;
+  }
 </style>
 
