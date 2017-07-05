@@ -35,6 +35,9 @@ export default {
       window.app.$store.dispatch('onAuthStateChanged', storeUser)
     })
   },
+  auth () {
+    return firebase.auth().currentUser !== null
+  },
   login () {
     const provider = new firebase.auth.GoogleAuthProvider()
     firebase.auth().signInWithPopup(provider)
