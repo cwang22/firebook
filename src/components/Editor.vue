@@ -41,6 +41,7 @@ export default {
     save () {
       if (this.isEdit) firebaseService.update(this.note)
       else firebaseService.create(this.note)
+      this.$router.push('/notes')
     },
     cancel () {
       this.$router.go(-1)

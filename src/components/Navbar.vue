@@ -45,7 +45,7 @@
     },
     computed: {
       authenticated () {
-        return this.$store.state.user.authenticated
+        return this.$store.getters.authenticated
       },
       username () {
         return this.$store.state.user.name

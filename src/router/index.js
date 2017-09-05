@@ -4,7 +4,7 @@ import Home from '@/pages/Home'
 import Notes from '@/pages/Notes'
 import EditNote from '@/pages/EditNote'
 import CreateNote from '@/pages/CreateNote'
-import firebaseService from '../services/firebase'
+import store from '@/store'
 Vue.use(Router)
 
 const routes = [{
@@ -38,7 +38,7 @@ const router = new Router({ routes })
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!firebaseService.auth()) {
+    if (!store.getters.authenticated) {
       next({ path: '/' })
     }
     next()

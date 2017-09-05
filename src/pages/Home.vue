@@ -12,10 +12,10 @@ export default {
   name: 'home',
   computed: {
     authenticated () {
-      return this.$store.state.user.authenticated
+      return this.$store.getters.authenticated
     },
     username () {
-      return this.$store.state.user.name
+      return this.$store.state.user.displayName
     }
   },
   methods: {

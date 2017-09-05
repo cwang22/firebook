@@ -9,40 +9,24 @@ const config = {
   messagingSenderId: '964397278361'
 }
 
-firebase.initializeApp(config)
-
 export default {
   init () {
+    firebase.initializeApp(config)
     firebase.auth().onAuthStateChanged(user => {
-      let storeUser
       if (user) {
-        storeUser = {
-          authenticated: true,
-          uid: user.uid,
-          name: user.displayName
-        }
         firebase.database().ref(`notes/${user.uid}`).on('value', (snapshot) => {
-          window.app.$store.dispatch('fetch', snapshot.val())
+          window.app.$store.dispatch('SET_NOTES', snapshot.val())
         })
-      } else {
-        storeUser = {
-          authenticated: false,
-          uid: '',
-          name: ''
-        }
-        window.app.$router.push('/')
       }
-      window.app.$store.dispatch('onAuthStateChanged', storeUser)
+      window.app.$store.dispatch('AUTH_STATE_CHANGED', user)
     })
-  },
-  auth () {
-    return firebase.auth().currentUser !== null
   },
   login () {
     const provider = new firebase.auth.GoogleAuthProvider()
     firebase.auth().signInWithPopup(provider)
   },
   logout () {
+    window.app.$router.push('/')
     firebase.auth().signOut()
   },
   create (note) {
