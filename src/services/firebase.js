@@ -1,5 +1,5 @@
 import firebase from 'firebase'
-
+import app from '../main'
 const config = {
   apiKey: 'AIzaSyAqrTWUzBIyENlG4323jm4ZI1TLjm0AWo4',
   authDomain: 'notebook-69274.firebaseapp.com',
@@ -15,10 +15,10 @@ export default {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         firebase.database().ref(`notes/${user.uid}`).on('value', (snapshot) => {
-          window.app.$store.dispatch('SET_NOTES', snapshot.val())
+          app.$store.dispatch('SET_NOTES', snapshot.val())
         })
       }
-      window.app.$store.dispatch('AUTH_STATE_CHANGED', user)
+      app.$store.dispatch('AUTH_STATE_CHANGED', user)
     })
   },
   login () {
@@ -26,7 +26,7 @@ export default {
     firebase.auth().signInWithPopup(provider)
   },
   logout () {
-    window.app.$router.push('/')
+    app.$router.push('/')
     firebase.auth().signOut()
   },
   create (note) {
@@ -35,7 +35,7 @@ export default {
   },
   update (note) {
     const user = firebase.auth().currentUser
-    const key = window.app.$route.params.key
+    const key = app.$route.params.key
     firebase.database().ref(`notes/${user.uid}/${key}`).set(note)
   },
   destroy (key) {

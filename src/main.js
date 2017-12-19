@@ -6,11 +6,15 @@ import router from './router'
 import store from './store'
 import api from './services/firebase'
 
-window.app = new Vue({
+Vue.config.productionTip = false
+
+/* eslint-disable no-new */
+export default new Vue({
   el: '#app',
   router,
   store,
-  render: h => h(App),
+  template: '<App/>',
+  components: { App },
   created: () => {
     api.init()
   }
